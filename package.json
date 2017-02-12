@@ -1,0 +1,11 @@
+{
+  "name": "bloomfilter-redis",
+  "version": "0.0.1",
+  "description": "A package implementing bloom filter using redis as backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "chendotjs",
+  "license": "MIT"
+}
