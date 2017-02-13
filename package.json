@@ -1,12 +1,26 @@
 {
   "name": "bloomfilter-redis",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A package implementing bloom filter using redis as backend.",
+  "tags": [
+    "bloomfilter",
+    "redis",
+    "bloom",
+    "fnv",
+    "murmur"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "chendotjs",
+  "author": "chendotjs <chendotjs@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chendotjs/bloomfilter-redis"
+  },
+  "bugs": {
+    "url": "https://github.com/chendotjs/bloomfilter-redis/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^2.1.4",
