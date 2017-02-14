@@ -1,5 +1,8 @@
 # bloomfilter-redis
 
+[![Linux Build Status](https://travis-ci.org/chendotjs/bloomfilter-redis.svg?branch=master)](https://travis-ci.org/chendotjs/bloomfilter-redis) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/osb7bfpfjrlutkeu/branch/master?svg=true)](https://ci.appveyor.com/project/chendotjs/bloomfilter-redis/branch/master)
+
+
 Bloomfilter-redis is a node.js package implementing bloom filter using redis as backend. 🚢
 
 ## Features
@@ -12,6 +15,7 @@ Bloomfilter-redis is a node.js package implementing bloom filter using redis as 
 ## Requirements
 
 - Redis-server installed and running
+- Node.js >= 6
 
 
 ## Install
