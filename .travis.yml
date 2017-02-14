@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "4"
+  - "5"
+  - "6"
+  - "node"
+sudo: false
+cache:
+  directories:
+    - node_modules
+services:
+  - redis-server
+script: "npm run-script test"
