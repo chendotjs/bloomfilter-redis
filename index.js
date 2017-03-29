@@ -13,9 +13,9 @@ let fnv_Uint32 = (str) => {
 
 let nthHash = (i, hashA, hashB, filterSize) => {
   return (hashA + i * hashB) % filterSize;
-}
+};
 
-const BloomFilter = function(config) {
+const BloomFilter = function (config) {
   config = config ? config : {};
   this.redisSize = Math.ceil(config['redisSize'] || 256); // in MegaBytes
   if (this.redisSize > 512 || this.redisSize < 0) // a redis string value can be at max 512 Megabytes in length!
@@ -33,11 +33,15 @@ const BloomFilter = function(config) {
 
 };
 
-BloomFilter.prototype.init = function() {
+BloomFilter.prototype.init = function (options) {
+  options = options ? options : {};
+  const redisKey = options['redisKey'] || this.redisKey;
+  const filterSize = options['filterSize'] || this.filterSize;
+
   return new Promise((resolve, reject) => {
     this.redisClient.select(this.db, () => {
       // first allocate memory in redis
-      this.redisClient.setbit(this.redisKey, this.filterSize - 1, 0, (err, reply) => {
+      this.redisClient.setbit(redisKey, filterSize - 1, 0, (err, reply) => {
         if (!err) {
           resolve(reply);
         } else {
@@ -48,7 +52,11 @@ BloomFilter.prototype.init = function() {
   });
 };
 
-BloomFilter.prototype.add = function(str) {
+BloomFilter.prototype.add = function (str, options) {
+  options = options ? options : {};
+  const redisKey = options['redisKey'] || this.redisKey;
+  const filterSize = options['filterSize'] || this.filterSize;
+
   return new Promise((resolve, reject) => {
     let fnv_hash = fnv_Uint32(str);
     let murmur3_hash = murmur3_Uint32(str);
@@ -57,14 +65,14 @@ BloomFilter.prototype.add = function(str) {
 
     for (let n = 0; n < this.hashesNum; n++) {
       let f = (asy_callback) => {
-        this.redisClient.setbit(this.redisKey, nthHash(n, fnv_hash, murmur3_hash, this.filterSize), 1, (err, reply) => {
+        this.redisClient.setbit(redisKey, nthHash(n, fnv_hash, murmur3_hash, filterSize), 1, (err, reply) => {
           asy_callback(err, reply.toString());
         });
       };
       setTasks.push(f);
     }
 
-    async.parallel(setTasks, function(error, results) {
+    async.parallel(setTasks, function (error, results) {
       if (!error)
         resolve(results);
       else
@@ -73,7 +81,17 @@ BloomFilter.prototype.add = function(str) {
   });
 };
 
-BloomFilter.prototype.contains = function(str, callback) {
+BloomFilter.prototype.contains = function (str, options, callback) {
+  options = options ? options : {};
+  if (typeof options === "function") {
+    callback = options;
+    const redisKey = this.redisKey;
+    const filterSize = this.filterSize;
+  } else {
+    const redisKey = options['redisKey'] || this.redisKey;
+    const filterSize = options['filterSize'] || this.filterSize;
+  }
+
   return new Promise((resolve, reject) => {
     let fnv_hash = fnv_Uint32(str);
     let murmur3_hash = murmur3_Uint32(str);
@@ -82,14 +100,14 @@ BloomFilter.prototype.contains = function(str, callback) {
 
     for (let n = 0; n < this.hashesNum; n++) {
       let f = (asy_callback) => {
-        this.redisClient.getbit(this.redisKey, nthHash(n, fnv_hash, murmur3_hash, this.filterSize), (err, reply) => {
+        this.redisClient.getbit(redisKey, nthHash(n, fnv_hash, murmur3_hash, filterSize), (err, reply) => {
           asy_callback(err, reply.toString());
         });
       };
       getTasks.push(f);
     }
 
-    async.parallel(getTasks, function(error, results) {
+    async.parallel(getTasks, function (error, results) {
       if (!error) {
         let possiblyContains = true;
         for (var i = 0; i < results.length; i++) {

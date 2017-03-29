@@ -13,7 +13,7 @@ describe('bloomfilter-redis', function() {
     return promise;
   });
 
-  it('should have a string named "Node_Bloomfilter_Redis" in the redis', function() {
+  it('should have a string named "Node_Bloomfilter_Redis" in redis', function() {
     client.strlen('Node_Bloomfilter_Redis', function(err, res) {
       let length = parseInt(res);
       length.should.not.be.equal(0);
