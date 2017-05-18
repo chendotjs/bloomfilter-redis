@@ -22,7 +22,7 @@ describe('bloomfilter-redis', function() {
   });
 
   it('should be able to add && contains', function() {
-    promise.then(() => {
+    return promise.then(() => {
         return bf.add('abc');
       })
       .then(() => {
@@ -45,8 +45,6 @@ describe('bloomfilter-redis', function() {
       })
       .then((result) => {
         result.should.be.equal(true);
-      }).catch(function(err) {
-        console.error(err);
       });
   });
 });
