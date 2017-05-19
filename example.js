@@ -41,7 +41,7 @@ promise.then(() => {
 
 /* or for an easier way, use promise.all() */
 
-// both array has `I love you`
+// both array contains `I love you`
 arr = ['我爱你', 'I love you', 'je t\'aime', 'ich liebe dich', 'Ti Amo', 'te amo vos amo'];
 testArr = ['사랑해요', 'I love you', '爱してる'];
 
@@ -60,6 +60,6 @@ testArr.forEach(str => {
 //lauch!
 Promise.all(promiseAddArr).then(() => {
   Promise.all(promiseContainsArr).then(results => {
-    console.log(results); // [ false, true, false ]. Yeah, that's the right answer
+    console.log(`promise.all() returns: ${results}`); // [ false, true, false ]. Yeah, that's the right answer
   })
 });
