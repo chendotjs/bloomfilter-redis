@@ -82,14 +82,14 @@ BloomFilter.prototype.add = function (str, options) {
 };
 
 BloomFilter.prototype.contains = function (str, options, callback) {
+  let redisKey = this.redisKey;
+  let filterSize = this.filterSize;
   options = options ? options : {};
   if (typeof options === "function") {
     callback = options;
-    const redisKey = this.redisKey;
-    const filterSize = this.filterSize;
   } else {
-    const redisKey = options['redisKey'] || this.redisKey;
-    const filterSize = options['filterSize'] || this.filterSize;
+    redisKey = options['redisKey'] || this.redisKey;
+    filterSize = options['filterSize'] || this.filterSize;
   }
 
   return new Promise((resolve, reject) => {
@@ -109,7 +109,6 @@ BloomFilter.prototype.contains = function (str, options, callback) {
 
     async.parallel(getTasks, function (error, results) {
       if (!error) {
-        let possiblyContains = true;
         for (var i = 0; i < results.length; i++) {
           if (results[i] == '0')
             resolve(false);
