@@ -39,6 +39,8 @@ BloomFilter.prototype.init = function (options) {
   const filterSize = options['filterSize'] || this.filterSize;
 
   return new Promise((resolve, reject) => {
+    if (!this.redisClient.connected)
+      reject('Redis connection failed');
     this.redisClient.select(this.db, () => {
       // first allocate memory in redis
       this.redisClient.setbit(redisKey, filterSize - 1, 0, (err, reply) => {
@@ -65,6 +67,8 @@ BloomFilter.prototype.add = function (str, options) {
 
     for (let n = 0; n < this.hashesNum; n++) {
       let f = (asy_callback) => {
+        if (!this.redisClient.connected)
+          reject('Redis connection failed');
         this.redisClient.setbit(redisKey, nthHash(n, fnv_hash, murmur3_hash, filterSize), 1, (err, reply) => {
           asy_callback(err, reply.toString());
         });
@@ -100,6 +104,8 @@ BloomFilter.prototype.contains = function (str, options, callback) {
 
     for (let n = 0; n < this.hashesNum; n++) {
       let f = (asy_callback) => {
+        if (!this.redisClient.connected)
+          reject('Redis connection failed');
         this.redisClient.getbit(redisKey, nthHash(n, fnv_hash, murmur3_hash, filterSize), (err, reply) => {
           asy_callback(err, reply.toString());
         });
