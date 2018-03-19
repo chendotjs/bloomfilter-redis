@@ -10,7 +10,7 @@ Bloomfilter-redis is a node.js package implementing bloom filter using redis as 
 
 - depends on [`redis`](https://www.npmjs.com/package/redis) package
 
-- you specify the filter size in redis, up to 512M   
+- you specify the filter size in redis, up to 512MB
 
 ## Requirements
 
@@ -30,11 +30,11 @@ npm install bloomfilter-redis
 const BloomFilter = require('bloomfilter-redis');
 const redis = require("redis");
 
-let bf = new BloomFilter({//all params have a default value, and I choose some to present below
-  redisSize: 16, // this will create a string value which is 16 MegaBytes in length
-  hashesNum: 8, // how many hash functions do we use
-  redisKey: 'test', //this will create a string which keyname is `test`
-  redisClient: redis.createClient(), //you can choose to create the client by yourself
+const bf = new BloomFilter({//all params have a default value, and I choose some to present below
+  redisSize: 256, // this will create a string value which is 16 MegaBytes in length
+  hashesNum: 16, // how many hash functions do we use
+  redisKey: 'Node_Bloomfilter_Redis', // this will create a string which keyname is `Node_Bloomfilter_Redis`
+  redisClient: redis.createClient(), // you can choose to create the client by yourself
 });
 
 promise = bf.init(); // invokes `SETBIT` to allocate memory in redis.For details https://redis.io/commands/setbit
@@ -73,7 +73,7 @@ Or for an easier way, use promise.all()
 const BloomFilter = require('bloomfilter-redis');
 const redis = require("redis");
 
-let bf = new BloomFilter();
+const bf = new BloomFilter();
 
 promise = bf.init();
 // both array has `I love you`
