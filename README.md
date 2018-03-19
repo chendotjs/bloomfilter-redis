@@ -30,10 +30,10 @@ npm install bloomfilter-redis
 const BloomFilter = require('bloomfilter-redis');
 const redis = require("redis");
 
-const bf = new BloomFilter({//all params have a default value, and I choose some to present below
-  redisSize: 256, // this will create a string value which is 16 MegaBytes in length
+const bf = new BloomFilter({// all params have a default value, and I choose some to present below
+  redisSize: 256, // this will create a string value which is 256 MegaBytes in length
   hashesNum: 16, // how many hash functions do we use
-  redisKey: 'Node_Bloomfilter_Redis', // this will create a string which keyname is `Node_Bloomfilter_Redis`
+  redisKey: 'Node_Bloomfilter_Redis', // this will create a string whose keyname is `Node_Bloomfilter_Redis`
   redisClient: redis.createClient(), // you can choose to create the client by yourself
 });
 
@@ -92,7 +92,7 @@ testArr.forEach(str => {
   promiseContainsArr.push(bf.contains(str)); // assembly contains tasks
 });
 
-//lauch!
+// lauch!
 Promise.all(promiseAddArr).then(() => {
   Promise.all(promiseContainsArr).then(results => {
     console.log(results); // [ false, true, false ]. Yeah, that's the right answer
